@@ -1,0 +1,28 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, appsettings.json!</h1>
+
+<p role="status">server1: @server1</p>
+<p role="status">server2: @server2</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+
+    private string server1 = "";
+    private string server2 = "";
+
+    private void IncrementCount()
+    {
+        var configuration = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json")
+        .Build();
+
+        server1 = configuration["Servers:server1"];
+        server2 = configuration["Servers:server2"];
+
+    }
+}
+
