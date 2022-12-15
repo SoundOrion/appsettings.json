@@ -9,6 +9,8 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+@inject IConfiguration Configuration
+
 @code {
 
     private string server1 = "";
@@ -16,13 +18,39 @@
 
     private void IncrementCount()
     {
-        var configuration = new ConfigurationBuilder()
+        var config = new ConfigurationBuilder()
         .AddJsonFile("appsettings.json")
         .Build();
 
-        server1 = configuration["Servers:server1"];
-        server2 = configuration["Servers:server2"];
+        server1 = config["Servers:server1"];
+        server2 = config["Servers:server2"];
 
+        var server1_2 = config.GetValue<string>("Servers:server1");
+        var server2_2 = config.GetValue<string>("Servers:server2");
+
+        var server1_3 = config.GetSection("Servers").GetValue<string>("server1");
+        var server2_3 = config.GetSection("Servers").GetValue<string>("server2");
+
+        var server1_4 = Configuration.GetSection("Servers").GetValue<string>("server1");
+        var server2_4 = Configuration.GetSection("Servers").GetValue<string>("server2");
     }
 }
 
+@*public class Test22Model : PageModel
+{
+    private readonly IConfiguration Configuration;
+
+    public Test22Model(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
+
+    public ContentResult OnGet()
+    {
+        var positionOptions = new PositionOptions();
+        Configuration.GetSection(PositionOptions.Position).Bind(positionOptions);
+
+        return Content($"Title: {positionOptions.Title} \n" +
+                       $"Name: {positionOptions.Name}");
+    }
+}*@
